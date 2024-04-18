@@ -1,5 +1,4 @@
 # Created on 04/04/24
-# Last modified on 04/04/24
 # Author : Maxence CHOISEL
 
 import tkinter as tk
@@ -324,7 +323,7 @@ class Boutons (tk.Frame) :
         if boss is None :
             boss = self
         if type_combobox :
-            btn = ttk.Combobox(boss, position, visibilite, nom_affiche, values=type_combobox)
+            btn = Bcombobox(boss, effet, position, visibilite, nom_affiche, values=type_combobox)
             self.items[nom_diminutif] = btn
         else :
             btn = Bouton (boss, position, visibilite, text=nom_affiche, command=effet)
@@ -355,12 +354,12 @@ class Boutons (tk.Frame) :
                 self.items[bout].commentaire.commentaire_label.config(font=("Verdana", text_size))
 
     def afficher (self, nom_bouton) :
-        self.items[nom_bouton][0].grid(row= self.items[nom_bouton][1])
-        self.items[nom_bouton][2] = "Visible"
+        self.items[nom_bouton].grid(row= self.items[nom_bouton].position)
+        self.items[nom_bouton].visibilite = "Visible"
 
     def cacher (self, nom_bouton) :
-        self.items[nom_bouton][0].grid_forget()
-        self.items[nom_bouton][2] = "Caché"
+        self.items[nom_bouton].grid_forget()
+        self.items[nom_bouton].visibilite = "Caché"
 
     def affiche_boutons_debut (self) :
         for bout in self.is_visible_debut :
@@ -372,13 +371,14 @@ class Boutons (tk.Frame) :
                 self.cacher(bout)
     
     def renommer (self, nom_bouton:str, new_nom_bouton:str) :
-        if type(self.items[nom_bouton]) == tk.Button :
+        assert nom_bouton in self.items
+        if type(self.items[nom_bouton]) == Bouton :
             self.items[nom_bouton].configure(text= new_nom_bouton)
-        elif type(self.items[nom_bouton]) == ttk.Combobox :
+        elif type(self.items[nom_bouton]) == Bcombobox :
             self.items[nom_bouton].set(new_nom_bouton)
 
     def is_visible (self, nom_bouton:str) :
-        return self.items[nom_bouton][2] == "Visible"
+        return self.items[nom_bouton].visibilite == "Visible"
     
     def supprimer (self, nom_bouton:str) :
         self.cacher (nom_bouton)
@@ -396,9 +396,9 @@ class Bouton (tk.Button) :
         self.commentaire = Commentaire(fenetre, self, texte, **kwarg)
         return self.commentaire
 
-class Combobox (ttk.Combobox) :
+class Bcombobox (ttk.Combobox) :
     def __init__ (self, boss, effet, position, visibilite, nom_affiche, **kwarg) :
-        ttk.Combobox.__init__(boss, state="readonly", justify="center", width=12, height=2, takefocus=False, style="TCombobox", **kwarg)
+        ttk.Combobox.__init__(self, boss, state="readonly", justify="center", width=12, height=2, takefocus=False, style="TCombobox", **kwarg)
         self.position = position
         self.visibilite = visibilite
         self.commentaire = False
