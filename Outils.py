@@ -6,27 +6,24 @@ from tkinter import ttk
 from typing import Literal
 from math import log
 from functools import partial
+from PIL import Image,ImageTk
 
 
 class Entite_superieure () :
-    def init_nom_fenetre (self, fenetre) :
-        self.fenetre = fenetre
-    
-    def init_variables_globales (self, tous_les_reglages) :
+    def init_variables_tres_globales (self) :
         """Permet de donner des valeurs arbitraires aux paramètres globaux (params par défaut)"""
-        self.reglages_fen = False
-        self.infos_fen = False
-        self.tous_les_reglages = tous_les_reglages
+        self.is_reglages_fen_on = False
+        self.is_infos_fen_on = False
         
-    def lancement_fenetre (self, objet_fenetre:tk.Tk, liste_commentaires:list = []) :
+    def lancement_fenetre (self, liste_commentaires:list = []) :
         "Precessus de démarrage de la fenêtre"
         for i in range (3) :
-            objet_fenetre.after(500+(i*100), objet_fenetre.redimentionner)
-        objet_fenetre.focus()
+            self.fenetre.after(500+(i*100), self.fenetre.redimentionner)
+        self.fenetre.focus()
         for com in liste_commentaires :
-            objet_fenetre.after(500, com.test)
-        objet_fenetre.protocol("WM_DELETE_WINDOW", partial(self.on_closing, objet_fenetre))
-        objet_fenetre.mainloop()
+            self.fenetre.after(500, com.test)
+        self.fenetre.protocol("WM_DELETE_WINDOW", partial(self.on_closing, self.fenetre))
+        self.fenetre.mainloop()
     
     def ouvrir_param_defaut (self, path_fichier, type_de_parametre:str = "") :
         """Télécharge les paramètres par défauts """
@@ -37,7 +34,7 @@ class Entite_superieure () :
             if type_de_parametre :
                 for ligne in f.readlines()[1:] :
                     l = ligne.split("\n")[0].split(",")
-                    if l[0] == "parcoureur" :
+                    if l[0] == type_de_parametre :
                         if len(l[2:]) == 1 :
                             self.parametres[l[1]] = l[2]
                         else :
@@ -69,42 +66,112 @@ class Entite_superieure () :
         self.save_param_defaut()
         objet_fenetre.destroy()
     
-    def infos_generales (self, **kwarg) :
+    def init_infos_generales (self, nom_sous_class_infos_generales) :
+        self.nom_sous_class_infos_generales = nom_sous_class_infos_generales
+    
+    def infos_generales (self) :
         "Lance ou met en avant la fenêtre des informations générales"
-        if self.infos_fen :
+        if self.is_infos_fen_on :
             self.infos_fen.lift()
             self.infos_fen.focus()
         else :
-            self.infos_fen = Infos_generales(self.fenetre, **kwarg)
+            self.infos_fen = self.nom_sous_class_infos_generales(self.fenetre, self)
             self.infos_fen.protocol("WM_DELETE_WINDOW", self.infos_fen_on_closing)
+            self.is_infos_fen_on = True
             self.infos_fen.mainloop()
     
     def infos_fen_on_closing (self) :
         "Permet d'enregistrer la fermeture de la fenêtre"
         self.infos_fen.destroy()
-        self.infos_fen = False
+        self.is_infos_fen_on = False
     
-    def init_reglages (self, **kwargs) :
-        "Initialise l'objet fenêtre des réglages sans l'afficher"
-        self.reglages_fen = Reglages(self.fenetre)
-        self.reglages_fen.init_entitees (self, self.fenetre)
-        self.reglages_fen.lancement(self.tous_les_reglages, **kwargs)
-        self.reglages_fen.protocol("WM_DELETE_WINDOW", self.reglages_fen_on_closing)
+    def init_reglages (self, tous_les_reglages) :
+        "Initialise l'objet fenêtre des réglages sans l'afficher. Pour l'afficher : appeller la fonction 'reglages'"
+        self.tous_les_reglages = tous_les_reglages
     
     def reglages (self) :
         "Lance ou met en avant la fenêtre des réglages"
-        if self.reglages_fen :
+        if self.is_reglages_fen_on :
             self.reglages_fen.lift()
             self.reglages_fen.focus()
         else :
+            self.reglages_fen = Reglages(self.fenetre)
+            self.reglages_fen.init_entitees (self, self.fenetre)
+            self.reglages_fen.lancement(self.tous_les_reglages)
+            self.reglages_fen.protocol("WM_DELETE_WINDOW", self.reglages_fen_on_closing)
+            self.is_reglages_fen_on = True
             self.reglages_fen.mainloop()
     
     def reglages_fen_on_closing (self) :
         "Permet d'enregistrer la fermeture de la fenêtre"
         self.reglages_fen.destroy()
-        self.reglages_fen = False
+        self.is_reglages_fen_on = False
 
-#class Fenetre (tk.Tk) :
+class Fenetre (tk.Tk) :
+    def init_logo (self, boss, params=[0,0]) :
+        self.logo = tk.Button(boss, command=self.big_boss.infos_generales)
+        self.logo.grid(column=params[0], row=params[1])
+    
+    def open_image (self, path, x_max=200, pourcentage_x_max=70) :
+        self.image = Image.open(path)
+        xx, yy = self.image.size
+        ratio = xx / yy
+        x = round(pourcentage_x_max/100 * x_max)
+        y = round(x / ratio)
+        self.image = self.image.resize((x,y))
+        self.image_photo = ImageTk.PhotoImage(self.image)
+        self.logo["image"] = self.image_photo
+
+class Canvas (tk.Canvas) :
+    def __init__ (self, color) :
+        tk.Canvas.__init__(self)
+        self.couleurs(change=False, initial_value=color)
+    
+    def taille_auto (self) :
+        "Calcule la taille en pixel d'un coté des cases carré à partir de la hauteur h et le la longeur l de la grille de définition"
+        if self.winfo_height() / self.grille.y < self.winfo_width() / self.grille.x :
+            self.taille = self.winfo_height() / (self.grille.y+1)
+        else :
+            self.taille = self.winfo_width() / (self.grille.x+1)
+    
+    def origines (self) :
+        "Calcule et renvoi sous forme de tuple les origines en x et y (en haut à gauche du canvas)"
+        self.origine_x = (self.winfo_width() - (self.taille * (self.grille.x-1))) / 2
+        self.origine_y = (self.winfo_height() - (self.taille * (self.grille.y-1))) / 2
+        assert self.origine_x > 0 and self.origine_y > 0
+    
+    def barre_verticale (self, ox, oy, t, color) :
+        "Trace dans le canvas une ligne verticale"
+        self.create_line (ox,oy,ox,oy+t, fill= color)
+    
+    def barre_horizontale (self, ox, oy, t, color) :
+        "Trace dans le canvas une ligne verticale"
+        self.create_line (ox,oy,ox+t,oy, fill= color)
+    
+    def couleurs (self, change=True, initial_value=False, event=None) :
+        if change :
+            if self.couleur_mode == "white" :
+                self.couleur_mode = "black"
+            else :
+                self.couleur_mode = "white"
+        elif initial_value :
+            self.couleur_mode = initial_value
+        if self.couleur_mode == "white" :
+            self.color_canvas = "white"
+            self["bg"] = self.color_canvas
+            self.color_grille = "black"
+            self.color_balle = "blue"
+            self.oposit_color_balle = "red"
+            self.color_balle_out = "black"
+        elif self.couleur_mode == "black" :
+            self.color_canvas = "black"
+            self["bg"] = self.color_canvas
+            self.color_grille = "white"
+            self.color_balle = "red"
+            self.oposit_color_balle = "blue"
+            self.color_balle_out = "white"
+        if change :
+            self.refresh_lab()
 
 
 class Reglages (tk.Toplevel) :
@@ -124,7 +191,7 @@ class Reglages (tk.Toplevel) :
         
         self.width_titres = 35
     
-    def lancement (self, reglages, **kwargs) :
+    def lancement (self, reglages) :
         self.canvas = tk.Canvas(self)
         self.content = tk.Frame(self.canvas)
         self.content.bind("<Configure>", self.resize_frame)
@@ -138,7 +205,7 @@ class Reglages (tk.Toplevel) :
         self.canvas.create_window((0, 0), window=self.content)
         self.canvas.configure(yscrollcommand=scrollbar_y.set, xscrollcommand=scrollbar_x.set)
         
-        self.lancement_tous_les_reglages(reglages, **kwargs)
+        self.lancement_tous_les_reglages(reglages)
         
         self.init_header()
         self.ajout_separation(position=2, boss=self, color="green", is_separation_principale=True)
@@ -151,7 +218,7 @@ class Reglages (tk.Toplevel) :
         #self.resizable(False, True)
         self.focus_set()
     
-    def lancement_tous_les_reglages (self, reglages, **kwargs) :
+    def lancement_tous_les_reglages (self, reglages) :
         self.tous_les_reglages = {}
         self.separations = []
         i = 0
@@ -162,7 +229,8 @@ class Reglages (tk.Toplevel) :
             reglage = regl(self.content)
             self.tous_les_reglages[reglage.name] = reglage
             self.tous_les_reglages[reglage.name].init_entitees_de_base(self, self.big_boss, self.fenetre)
-            self.tous_les_reglages[reglage.name].init_entitees(**kwargs)
+            if callable(self.tous_les_reglages[reglage.name].init_entitees) :
+                self.tous_les_reglages[reglage.name].init_entitees()
             self.tous_les_reglages[reglage.name].lancement()
             self.tous_les_reglages[reglage.name].grid(row=i)
             i += 1
@@ -576,10 +644,4 @@ class Infos_generales (tk.Toplevel) :
         text.tag_config("content", justify="center")
         text['state'] = 'disabled'
         text.grid(column=0, row=0, sticky=tk.NSEW)
-        
-        
-        bouton_1 = tk.Button (self, text="Ouvrir le Builder de Labyrinthes", padx=20, pady=10, font=("Helvetica", 13), bg="blue", fg= "white", \
-            command=self.big_boss.lancement_builder_labs)
-        bouton_1.configure(state = 'disabled', bg="grey")
-        bouton_1.grid(column=0, row=1)
 
