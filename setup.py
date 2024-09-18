@@ -10,7 +10,7 @@ setup(
     url="https://github.com/Maxe2005/Outils_Tkinter",  # URL du dépôt GitHub ou site du projet
     packages=find_packages(),  # Inclut tous les packages Python dans le projet
     install_requires=[  # Liste des dépendances du projet
-        "Tkinter>=8.6.0",
+        "Tkinter>=0.8.6",
         "Pillow>=10.4.0"
     ],
     classifiers=[  # Catégories pour ton projet (optionnel, mais utile pour PyPI)
