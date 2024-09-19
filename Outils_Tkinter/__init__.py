@@ -1,19 +1,5 @@
 import importlib
 
-from .Commentaires import Commentaire
-from .Boutons import Boutons, Bouton ,Bcombobox
-from .Infos import Infos, Infos_generales
-from .Reglages import Reglages, Base_Reglages
-from .Structure_globale import Entite_superieure, Canvas, Fenetre
-
-__all__ = ["Commentaire",
-           "Boutons", "Bouton", "Bcombobox",
-           "Infos", "Infos_generales",
-           "Reglages", "Base_Reglages",
-           "Entite_superieure", "Canvas", "Fenetre"]
-
-
-
 
 def safe_import(module_name, from_list=None, alias=None):
     """
@@ -68,5 +54,19 @@ math_object = safe_import('math', from_list=['log'])
 log = math_object["log"]
 
 functools_object = safe_import('functools', from_list=['partial'])
-log = functools_object["partial"]
+partial = functools_object["partial"]
 
+
+
+
+from .Commentaires import Commentaire
+from .Boutons import Boutons, Bouton ,Bcombobox
+from .Infos import Infos, Infos_generales
+from .Reglages import Reglages, Base_Reglages
+from .Structure_globale import Entite_superieure, Canvas, Fenetre
+
+__all__ = ["Commentaire",
+           "Boutons", "Bouton", "Bcombobox",
+           "Infos", "Infos_generales",
+           "Reglages", "Base_Reglages",
+           "Entite_superieure", "Canvas", "Fenetre"]
