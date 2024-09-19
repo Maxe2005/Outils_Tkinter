@@ -1,10 +1,11 @@
 # Created on 19/09/24
 # Author : Maxence CHOISEL
-
+"""
 import tkinter as tk
 from PIL import Image, ImageTk
 from .Reglages import Reglages
 from functools import partial
+"""
 class Entite_superieure () :
     def init_variables_tres_globales (self) :
         """Permet de donner des valeurs arbitraires aux paramètres globaux (params par défaut)"""
@@ -29,21 +30,21 @@ class Entite_superieure () :
         with open(path_fichier) as f :
             if type_de_parametre :
                 for ligne in f.readlines()[1:] :
-                    l = ligne.split("\n")[0].split(",")
-                    if l[0] == type_de_parametre :
-                        if len(l[2:]) == 1 :
-                            self.parametres[l[1]] = l[2]
+                    li = ligne.split("\n")[0].split(",")
+                    if li[0] == type_de_parametre :
+                        if len(li[2:]) == 1 :
+                            self.parametres[li[1]] = li[2]
                         else :
-                            self.parametres[l[1]] = l[2:]
+                            self.parametres[li[1]] = li[2:]
                     else :
                         self.autres_parametres.append(ligne)
             else :
                 for ligne in f.readlines()[1:] :
-                    l = ligne.split("\n")[0].split(",")
-                    if len(l[1:]) == 1 :
-                        self.parametres[l[0]] = l[1]
+                    li = ligne.split("\n")[0].split(",")
+                    if len(li[1:]) == 1 :
+                        self.parametres[li[0]] = li[1]
                     else :
-                        self.parametres[l[0]] = l[1:]
+                        self.parametres[li[0]] = li[1:]
     
     def save_param_defaut (self) :
         "Sauvegarde les paramètre dans le fichier dédié"

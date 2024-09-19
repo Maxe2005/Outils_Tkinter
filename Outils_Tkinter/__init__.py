@@ -1,8 +1,27 @@
 import importlib
 
+import tkinter as tk
+from typing import Literal
+from tkinter import ttk
+from math import log
+from PIL import Image, ImageTk
+from functools import partial
 
+from .Commentaires import Commentaire
+from .Boutons import Boutons, Bouton ,Bcombobox
+from .Infos import Infos, Infos_generales
+from .Reglages import Reglages, Base_Reglages
+from .Structure_globale import Entite_superieure, Canvas, Fenetre
+
+__all__ = ["Commentaire",
+           "Boutons", "Bouton", "Bcombobox",
+           "Infos", "Infos_generales",
+           "Reglages", "Base_Reglages",
+           "Entite_superieure", "Canvas", "Fenetre"]
+
+"""
 def safe_import(module_name, from_list=None, alias=None):
-    """
+    ""
     Tente d'importer un module ou des éléments spécifiques d'un module, et renvoie les objets importés.
     
     Args:
@@ -12,7 +31,7 @@ def safe_import(module_name, from_list=None, alias=None):
 
     Returns:
         module or dict or None: Le module ou les éléments importés, ou None s'ils ne sont pas disponibles.
-    """
+    ""
     try:
         module = importlib.import_module(module_name)
         
@@ -37,7 +56,7 @@ def safe_import(module_name, from_list=None, alias=None):
         return None
 
 
-tk = safe_import('tkinter', 'tk')  # Pour 'import tkinter as tk'
+tk = safe_import('tkinter', alias='tk')  # Pour 'import tkinter as tk'
 
 PIL_objects = safe_import('PIL', from_list=['Image', 'ImageTk'])
 if PIL_objects:
@@ -56,17 +75,6 @@ log = math_object["log"]
 functools_object = safe_import('functools', from_list=['partial'])
 partial = functools_object["partial"]
 
+"""
 
 
-
-from .Commentaires import Commentaire
-from .Boutons import Boutons, Bouton ,Bcombobox
-from .Infos import Infos, Infos_generales
-from .Reglages import Reglages, Base_Reglages
-from .Structure_globale import Entite_superieure, Canvas, Fenetre
-
-__all__ = ["Commentaire",
-           "Boutons", "Bouton", "Bcombobox",
-           "Infos", "Infos_generales",
-           "Reglages", "Base_Reglages",
-           "Entite_superieure", "Canvas", "Fenetre"]

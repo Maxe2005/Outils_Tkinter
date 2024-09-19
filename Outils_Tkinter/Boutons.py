@@ -1,11 +1,11 @@
 # Created on 19/09/24
 # Author : Maxence CHOISEL
-
+"""
 import tkinter as tk
 from tkinter import ttk
 from math import log
 from .Commentaires import Commentaire
-
+"""
 class Boutons (tk.Frame) :
     def __init__(self, boss, big_boss, fenetre:tk.Tk, class_comentaire=None) :
         tk.Frame.__init__(self, boss)
