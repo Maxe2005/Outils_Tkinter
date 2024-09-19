@@ -1,12 +1,5 @@
 import importlib
 
-import tkinter as tk
-from typing import Literal
-from tkinter import ttk
-from math import log
-from PIL import Image, ImageTk
-from functools import partial
-
 from .Commentaires import Commentaire
 from .Boutons import Boutons, Bouton ,Bcombobox
 from .Infos import Infos, Infos_generales

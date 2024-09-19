@@ -1,9 +1,9 @@
 # Created on 19/09/24
 # Author : Maxence CHOISEL
 
-#import tkinter as tk
-#from PIL import Image, ImageTk
-#from .Reglages import Reglages
+import tkinter as tk
+from PIL import Image, ImageTk
+from .Reglages import Reglages
 from functools import partial
 
 class Entite_superieure () :

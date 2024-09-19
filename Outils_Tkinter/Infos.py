@@ -1,7 +1,7 @@
 # Created on 19/09/24
 # Author : Maxence CHOISEL
 
-#import tkinter as tk
+import tkinter as tk
 
 class Infos (tk.Toplevel) :
     def __init__(self, boss, titre:str = "test", texte:str = "test", pourcentage_largeur:int = 90, police:str = "arial", taille_police:int = 15, color:int = "white") :

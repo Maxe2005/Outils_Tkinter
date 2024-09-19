@@ -1,8 +1,8 @@
 # Created on 19/09/24
 # Author : Maxence CHOISEL
 
-#import tkinter as tk
-#from tkinter import ttk
+import tkinter as tk
+from tkinter import ttk
 
 class Reglages (tk.Toplevel) :
     def __init__ (self, boss) :
