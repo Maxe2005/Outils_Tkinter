@@ -6,7 +6,8 @@ from .Infos import Infos, Infos_generales
 from .Reglages import Reglages, Base_Reglages
 from .Structure_globale import Entite_superieure, Canvas, Fenetre
 
-__all__ = ["Commentaire",
+__all__ = ["tk", "ttk", "partial", "Image", "ImageTk",
+           "Commentaire",
            "Boutons", "Bouton", "Bcombobox",
            "Infos", "Infos_generales",
            "Reglages", "Base_Reglages",
