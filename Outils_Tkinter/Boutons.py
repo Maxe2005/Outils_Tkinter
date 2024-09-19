@@ -1,7 +1,10 @@
 # Created on 19/09/24
 # Author : Maxence CHOISEL
 
-
+import tkinter as tk
+from tkinter import ttk
+from math import log
+from .Commentaires import Commentaire
 
 class Boutons (tk.Frame) :
     def __init__(self, boss, big_boss, fenetre:tk.Tk, class_comentaire=None) :
@@ -100,9 +103,9 @@ class Boutons (tk.Frame) :
     
     def renommer (self, nom_bouton:str, new_nom_bouton:str) :
         assert nom_bouton in self.items
-        if type(self.items[nom_bouton]) == Bouton :
+        if type(self.items[nom_bouton]) is Bouton :
             self.items[nom_bouton].configure(text= new_nom_bouton)
-        elif type(self.items[nom_bouton]) == Bcombobox :
+        elif type(self.items[nom_bouton]) is Bcombobox :
             self.items[nom_bouton].set(new_nom_bouton)
 
     def is_visible (self, nom_bouton:str) :

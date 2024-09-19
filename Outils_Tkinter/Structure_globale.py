@@ -1,7 +1,10 @@
 # Created on 19/09/24
 # Author : Maxence CHOISEL
 
-
+import tkinter as tk
+from PIL import Image, ImageTk
+from .Reglages import Reglages
+from functools import partial
 class Entite_superieure () :
     def init_variables_tres_globales (self) :
         """Permet de donner des valeurs arbitraires aux paramètres globaux (params par défaut)"""
@@ -47,7 +50,7 @@ class Entite_superieure () :
         with open(self.path_fichier_parametres_defaut, "w") as f :
             f.write("# Entitee du parametre, Nom du parametre, valeur du parametre\n")
             for param in self.parametres :
-                if type(self.parametres[param]) == list :
+                if type(self.parametres[param]) is list :
                     f.write("parcoureur,"+param+","+",".join(self.parametres[param])+"\n")
                 else :
                     f.write("parcoureur,"+param+","+str(self.parametres[param])+"\n")

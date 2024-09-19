@@ -1,6 +1,8 @@
 # Created on 19/09/24
 # Author : Maxence CHOISEL
 
+import tkinter as tk
+from typing import Literal
 
 class Commentaire (tk.Toplevel) :
     def __init__(self, fenetre, widget, texte:str, aligne_in:str = "center" | Literal["center", "left", "right","top", "bottom"] , position_out:list = ["L","B","R","T"]) -> None :
